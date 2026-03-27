@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EchoWard — Your voice, your shield.</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🛡️</span>
+        <div>
+          <h1>EchoWard</h1>
+          <p class="tagline">Your voice, your shield.</p>
+        </div>
+      </div>
+      <div class="header-badge">AI for Good Hackathon 2026</div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main>
+
+    <!-- Search Section -->
+    <section class="search-section">
+      <h2>What would you like to buy today?</h2>
+      <p class="search-hint">Type or speak — EchoWard will find safe options for you.</p>
+
+      <div class="search-bar">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder='Try: "headphones under 40 euros" or "smartwatch"'
+          autocomplete="off"
+        />
+        <button id="voiceBtn" class="voice-btn" title="Speak">🎙️</button>
+        <button id="searchBtn" class="search-btn">Search</button>
+      </div>
+
+      <!-- Voice status indicator -->
+      <div id="voiceStatus" class="voice-status hidden">
+        <span class="pulse-dot"></span>
+        <span>Listening... speak now</span>
+      </div>
+
+      <!-- Quick suggestions -->
+      <div class="suggestions">
+        <span class="suggestion-label">Try:</span>
+        <button class="chip" data-query="headphones under 40 euros">headphones under €40</button>
+        <button class="chip" data-query="smartwatch">smartwatch</button>
+        <button class="chip" data-query="bluetooth speaker">bluetooth speaker</button>
+        <button class="chip" data-query="earbuds">earbuds</button>
+      </div>
+    </section>
+
+    <!-- EchoWard Status Bar -->
+    <div id="statusBar" class="status-bar hidden">
+      <span class="status-icon">🔍</span>
+      <span id="statusText">Searching and checking safety...</span>
+    </div>
+
+    <!-- Results Section -->
+    <section id="resultsSection" class="results-section hidden">
+
+      <!-- Recommendation Banner -->
+      <div id="recommendationBanner" class="recommendation-banner hidden">
+        <div class="rec-icon">✅</div>
+        <div class="rec-text">
+          <strong>EchoWard Recommends</strong>
+          <span id="recommendedProduct"></span>
+        </div>
+      </div>
+
+      <!-- Results Grid -->
+      <div id="resultsGrid" class="results-grid"></div>
+
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+      <h3>How EchoWard protects you</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-icon">🎙️</div>
+          <h4>You ask</h4>
+          <p>Tell EchoWard what you're looking for, by voice or text</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-icon">🔍</div>
+          <h4>We check</h4>
+          <p>Every listing is analyzed for price fraud, fake sellers, and suspicious URLs</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-icon">🛡️</div>
+          <h4>You decide safely</h4>
+          <p>Clear risk ratings and plain-language warnings — you always make the final call</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Warning Modal -->
+  <div id="warningModal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-icon">⚠️</div>
+      <h2 id="modalTitle">High Risk Detected</h2>
+      <div id="modalRiskBadge" class="risk-badge risk-critical">CRITICAL RISK</div>
+      <p id="modalProductName" class="modal-product-name"></p>
+      <div id="modalReasons" class="modal-reasons"></div>
+      <p class="modal-question">Do you still want to proceed with this purchase?</p>
+      <div class="modal-actions">
+        <button id="modalNo" class="btn-safe">No, go back to safe options</button>
+        <button id="modalYes" class="btn-danger">Yes, proceed anyway</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Safe Proceed Toast -->
+  <div id="safeToast" class="toast hidden">
+    ✅ Great choice! Proceeding to checkout...
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
