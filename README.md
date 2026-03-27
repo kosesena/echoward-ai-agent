@@ -80,36 +80,6 @@ Alexandra · Ceren · Sarper · Sarper Kahvecioglu · Sena
 
 ---
 
-## 🗂️ Repo Structure
-
-```
-echoward-ai-agent/
-├── frontend/               ← Demo website (Sena)
-│   ├── index.html          Voice/text search, product cards, risk badges, warning modal
-│   ├── style.css
-│   └── app.js              Risk scoring UI logic + demo data
-│
-├── backend/                ← Scam logic (Sarper K.)
-│   ├── risk_scorer.py      Core risk scoring engine (mirrors Copilot Studio action)
-│   └── README.md
-│
-├── demo-data/              ← Shared by all
-│   ├── products.json       8 products: safe, medium-risk, and scam examples
-│   └── scam_cases.json     5 scam patterns with plain-language explanations
-│
-├── 00-Setup/               ← Environment setup guide
-├── 01-Copilot-Studio/      ← Agent builds (Ceren + Sarper K.)
-│   ├── orchestrator/
-│   ├── shopping-assistant/
-│   └── scam-detector/
-├── 02-Azure-AI-Foundry/    ← Fake image detection (Sarper)
-├── 03-Azure-Speech/        ← Voice interface (Sarper)
-│
-├── supportdocs/            ← Architecture + Responsible AI (Alexandra)
-└── use-cases/              ← Demo scenarios (Alexandra)
-```
-
----
 
 ## 🚨 What EchoWard Detects
 
