@@ -81,6 +81,33 @@ Alexandra · Ceren · Sarper · Sarper Kahvecioglu · Sena
 ---
 
 
+## 🗂️ Repo Structure
+
+```
+echoward-ai-agent/
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
+├── backend/
+│   ├── risk_scorer.py
+│   └── README.md
+├── demo-data/
+│   ├── products.json
+│   └── scam_cases.json
+├── 00-Setup/
+├── 01-Copilot-Studio/
+│   ├── orchestrator/
+│   ├── shopping-assistant/
+│   └── scam-detector/
+├── 02-Azure-AI-Foundry/
+├── 03-Azure-Speech/
+├── supportdocs/
+└── use-cases/
+```
+
+---
+
 ## 🚨 What EchoWard Detects
 
 | Signal | Example |
