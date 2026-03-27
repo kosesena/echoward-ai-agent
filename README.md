@@ -149,20 +149,32 @@ echoward-ai-agent/
 
 ## 🗺️ Demo Scenario (Pitch)
 
-```
-User:      "Find me headphones under 40 euros."
-EchoWard:  "Searching and checking safety for each result..."
+```mermaid
+sequenceDiagram
+    actor U as 🎙️ User
+    participant E as 🛡️ EchoWard
+    participant SA as 🛒 Shopping Assistant
+    participant SD as 🔍 Scam Detector
 
-           Option 1: Sony WH-CH510, €34.99. ✅ Safe seller.
-           Option 2: "Brand New" Headphones Pro, €8.99.
-                     ⚠️ CRITICAL RISK — price 76% below market,
-                     seller 4 days old, fake product image detected.
-           Option 3: Anker Q20, €28.99. ✅ Safe seller.
+    U->>E: "Find me headphones under 40 euros."
+    E->>SA: Search products under €40
+    SA-->>E: Returns 3 results
 
-           EchoWard recommends: Option 1 or 3.
+    E->>SD: Analyze all 3 listings (parallel)
 
-User:      "I'll take option 1."
-EchoWard:  "Great choice. Proceeding to checkout."
+    Note over SD: Option 1 — Sony €34.99<br/>Seller: 4 years active, 4800+ reviews ✅
+    Note over SD: Option 2 — "Brand New" €8.99<br/>Price 76% below market 🚨<br/>Seller: 4 days old, 0 reviews 🚨<br/>Fake product image detected 🚨
+    Note over SD: Option 3 — Anker €28.99<br/>Seller: 3 years active, 6500+ reviews ✅
+
+    SD-->>E: Risk scores attached to each result
+
+    E->>U: "Option 1: Sony WH-CH510, €34.99. ✅ Safe."
+    E->>U: "Option 2: ⚠️ CRITICAL RISK — price 76% below market,<br/>seller 4 days old, fake image detected. Skip this one?"
+    E->>U: "Option 3: Anker Q20, €28.99. ✅ Safe."
+    E->>U: "EchoWard recommends Option 1 or 3."
+
+    U->>E: "I'll take option 1."
+    E->>U: "Great choice. Proceeding to checkout. ✅"
 ```
 
 ---
