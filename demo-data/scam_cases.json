@@ -1,0 +1,52 @@
+[
+  {
+    "id": "scam_001",
+    "name": "Price Too Good To Be True",
+    "description": "Product listed at 76–90% below market average price",
+    "signals": ["price_anomaly_critical"],
+    "example_product_id": 5,
+    "risk_score": "Critical",
+    "plain_language_explanation": "This price is extremely far below what this product normally costs. Legitimate sellers almost never discount this much. This is one of the most common scam tactics.",
+    "what_usually_happens": "Buyer pays, receives a counterfeit item or nothing at all."
+  },
+  {
+    "id": "scam_002",
+    "name": "Brand New Seller, No Reviews",
+    "description": "Seller account created less than 7 days ago with zero reviews",
+    "signals": ["new_seller", "no_reviews"],
+    "example_product_id": 4,
+    "risk_score": "High",
+    "plain_language_explanation": "This seller is brand new and has no customer reviews. Legitimate businesses build their reputation over time. A seller with no history is a significant warning sign.",
+    "what_usually_happens": "Seller disappears after receiving payment, or sends a cheap substitute."
+  },
+  {
+    "id": "scam_003",
+    "name": "Fake or Suspicious URL",
+    "description": "Website URL mimics a well-known brand but is not the official domain",
+    "signals": ["suspicious_url"],
+    "example_product_id": 8,
+    "risk_score": "High",
+    "plain_language_explanation": "This website address looks very similar to a trusted store, but it is not the real website. Scammers deliberately create fake websites that look almost identical to trick people into entering their payment details.",
+    "what_usually_happens": "Payment information is stolen. No product is ever sent."
+  },
+  {
+    "id": "scam_004",
+    "name": "Fake Product Image",
+    "description": "Product image does not match the product being sold",
+    "signals": ["image_mismatch"],
+    "example_product_id": 5,
+    "risk_score": "High",
+    "plain_language_explanation": "The photo shown in this listing does not match the product being described. This is often a sign that the seller does not actually have this product, or is selling a fake version.",
+    "what_usually_happens": "Buyer receives a completely different, inferior product."
+  },
+  {
+    "id": "scam_005",
+    "name": "Multiple Signals Combined (Critical)",
+    "description": "New seller + no reviews + price anomaly + no return policy + fake image",
+    "signals": ["new_seller", "no_reviews", "price_anomaly_critical", "no_return_policy", "image_mismatch"],
+    "example_product_id": 4,
+    "risk_score": "Critical",
+    "plain_language_explanation": "This listing has multiple serious warning signs at once. When several fraud signals appear together, the risk of being scammed is very high. EchoWard strongly recommends not purchasing from this seller.",
+    "what_usually_happens": "Classic advance-fee or counterfeit scam. Buyer loses money with no recourse."
+  }
+]

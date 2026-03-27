@@ -1,0 +1,149 @@
+[
+  {
+    "id": 1,
+    "name": "Sony WH-CH510 Wireless Headphones",
+    "price": 34.99,
+    "market_avg_price": 39.99,
+    "seller": {
+      "name": "SonyOfficialStore",
+      "age_days": 1460,
+      "review_count": 4821,
+      "has_return_policy": true
+    },
+    "url": "https://www.amazon.com/dp/B07YGZ7GSQ",
+    "image_url": "https://placehold.co/300x300/e8f5e9/2e7d32?text=Sony+WH-CH510",
+    "image_authentic": true,
+    "category": "headphones",
+    "rating": 4.5,
+    "expected_risk": "Low"
+  },
+  {
+    "id": 2,
+    "name": "JBL Tune 510BT Wireless Headphones",
+    "price": 37.99,
+    "market_avg_price": 42.00,
+    "seller": {
+      "name": "JBL_AudioShop",
+      "age_days": 720,
+      "review_count": 2103,
+      "has_return_policy": true
+    },
+    "url": "https://www.amazon.com/dp/B08WM3NZWW",
+    "image_url": "https://placehold.co/300x300/e8f5e9/2e7d32?text=JBL+Tune+510BT",
+    "image_authentic": true,
+    "category": "headphones",
+    "rating": 4.3,
+    "expected_risk": "Low"
+  },
+  {
+    "id": 3,
+    "name": "Anker Soundcore Q20 Headphones",
+    "price": 28.99,
+    "market_avg_price": 32.00,
+    "seller": {
+      "name": "AnkerDirect",
+      "age_days": 1095,
+      "review_count": 6540,
+      "has_return_policy": true
+    },
+    "url": "https://www.amazon.com/dp/B07QLRD5Z2",
+    "image_url": "https://placehold.co/300x300/e8f5e9/2e7d32?text=Anker+Q20",
+    "image_authentic": true,
+    "category": "headphones",
+    "rating": 4.4,
+    "expected_risk": "Low"
+  },
+  {
+    "id": 4,
+    "name": "\"Brand New\" Wireless Headphones Pro",
+    "price": 8.99,
+    "market_avg_price": 38.00,
+    "seller": {
+      "name": "DealsToday2024",
+      "age_days": 4,
+      "review_count": 0,
+      "has_return_policy": false
+    },
+    "url": "https://www.amaz0n-deals.xyz/dp/B00FAKE123",
+    "image_url": "https://placehold.co/300x300/ffebee/c62828?text=Suspicious+Item",
+    "image_authentic": false,
+    "image_note": "Generic stock photo — does not match product description",
+    "category": "headphones",
+    "rating": 5.0,
+    "expected_risk": "Critical"
+  },
+  {
+    "id": 5,
+    "name": "Samsung Galaxy Watch 5 — Limited Deal",
+    "price": 49.99,
+    "market_avg_price": 249.00,
+    "seller": {
+      "name": "FlashSaleHub",
+      "age_days": 11,
+      "review_count": 3,
+      "has_return_policy": false
+    },
+    "url": "https://www.samsung-deals-outlet.net/watch5",
+    "image_url": "https://placehold.co/300x300/ffebee/c62828?text=Suspicious+Item",
+    "image_authentic": false,
+    "image_note": "Image shows an unbranded watch — not Samsung Galaxy Watch 5",
+    "category": "smartwatch",
+    "rating": 4.9,
+    "expected_risk": "Critical"
+  },
+  {
+    "id": 6,
+    "name": "Garmin Vivoactive 4S Smartwatch",
+    "price": 89.00,
+    "market_avg_price": 99.99,
+    "seller": {
+      "name": "GarminEU_Official",
+      "age_days": 850,
+      "review_count": 1342,
+      "has_return_policy": true
+    },
+    "url": "https://www.amazon.com/dp/B07YFMHQHH",
+    "image_url": "https://placehold.co/300x300/e8f5e9/2e7d32?text=Garmin+Vivoactive",
+    "image_authentic": true,
+    "category": "smartwatch",
+    "rating": 4.6,
+    "expected_risk": "Low"
+  },
+  {
+    "id": 7,
+    "name": "Generic Bluetooth Speaker XL",
+    "price": 19.99,
+    "market_avg_price": 24.00,
+    "seller": {
+      "name": "TechBargainShop",
+      "age_days": 28,
+      "review_count": 12,
+      "has_return_policy": false
+    },
+    "url": "https://www.techbargains-store.com/speaker-xl",
+    "image_url": "https://placehold.co/300x300/fff8e1/f57f17?text=Low+Reviews",
+    "image_authentic": true,
+    "category": "speaker",
+    "rating": 3.8,
+    "expected_risk": "Medium"
+  },
+  {
+    "id": 8,
+    "name": "Apple AirPods Pro 2nd Gen — Clearance",
+    "price": 29.99,
+    "market_avg_price": 199.00,
+    "seller": {
+      "name": "AppleDeals99",
+      "age_days": 6,
+      "review_count": 1,
+      "has_return_policy": false
+    },
+    "url": "https://www.apple-clearance-eu.shop/airpods",
+    "image_url": "https://placehold.co/300x300/ffebee/c62828?text=Suspicious+Item",
+    "image_authentic": false,
+    "image_note": "Image appears to be a low-quality copy of Apple's official marketing photo",
+    "category": "earbuds",
+    "rating": 5.0,
+    "expected_risk": "Critical"
+  }
+]
