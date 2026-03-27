@@ -76,6 +76,14 @@ flowchart TD
     style TTS fill:#f3e5f5,stroke:#6a1b9a,color:#1a1a2e
 ```
 
+| Color | Component |
+|---|---|
+| 🔵 Blue | Microsoft Copilot Studio agents & user |
+| 🟠 Orange | Scam Detector — main agent |
+| 🟡 Yellow | Risk scoring, URL check, image detection |
+| 🔴 Red | Human-in-the-Loop approval |
+| 🟣 Purple | Azure Speech Services (STT / TTS) |
+
 ---
 
 ## 👥 Team
