@@ -59,28 +59,24 @@ User (Voice / Text)
 
 ---
 
-## 👥 Team & Roles
+## 👥 Team
 
-| Person | Role |
-|---|---|
-| **Sena** | Frontend UI (`frontend/`) + presentation support |
-| **Ceren** | Copilot Studio — EchoWard Orchestrator (`01-Copilot-Studio/orchestrator/`) |
-| **Sarper K.** | Scam logic / backend (`backend/`) + Scam Detector agent (`01-Copilot-Studio/scam-detector/`) |
-| **Sarper** | Azure AI Foundry — image fraud detection (`02-Azure-AI-Foundry/`) + Azure Speech (`03-Azure-Speech/`) |
-| **Alexandra** | Docs, testing, demo scenario coordination (`use-cases/`, `supportdocs/`) + pitch flow |
+Alexandra · Ceren · Sarper · Sarper Kahvecioglu · Sena
+
+*Role assignments to be confirmed — 5 members, tasks TBD.*
 
 ---
 
 ## ⏱️ Hackathon Build Order (Day 2)
 
-| Phase | Time | Who | Deliverable |
-|---|---|---|---|
-| Setup | 12:00 – 12:15 | Everyone | GitHub access, Copilot Studio, Azure — all confirmed |
-| Phase 1 | 12:15 – 13:15 | Ceren + Sarper K. | Orchestrator + Scam Detector skeleton in Copilot Studio |
-| Phase 2 | 13:15 – 14:30 | Sarper K. + Sarper | Scam logic wired up, Shopping Assistant connected, HITL flow |
-| Phase 3 | 14:30 – 15:30 | Sarper + Sena | Azure Foundry image check, Azure Speech voice I/O, frontend live |
-| Phase 4 | 15:30 – 16:15 | Alexandra + all | End-to-end test with demo scenario, pitch polish |
-| Pitch | 17:15 – 19:15 | All | Live demo + jury presentation |
+| Phase | Time | Deliverable |
+|---|---|---|
+| Setup | 12:00 – 12:15 | GitHub access, Copilot Studio, Azure — all confirmed |
+| Phase 1 | 12:15 – 13:15 | Orchestrator + Scam Detector skeleton in Copilot Studio |
+| Phase 2 | 13:15 – 14:30 | Scam logic wired up, Shopping Assistant connected, HITL flow |
+| Phase 3 | 14:30 – 15:30 | Azure Foundry image check, Azure Speech voice I/O, frontend live |
+| Phase 4 | 15:30 – 16:15 | End-to-end test with demo scenario, pitch polish |
+| Pitch | 17:15 – 19:15 | Live demo + jury presentation |
 
 ---
 
