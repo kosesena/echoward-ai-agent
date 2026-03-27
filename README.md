@@ -34,27 +34,46 @@ EchoWard sits alongside the user during online shopping and:
 
 ## 🏗️ Architecture
 
-```
-User (Voice / Text)
-    │
-    ▼ Azure Speech STT
-┌───────────────────────────┐
-│   EchoWard Orchestrator   │  ← Copilot Studio
-└───────────┬───────────────┘
-            │ Handoff
-            ▼
-┌───────────────────────────────────────┐
-│         Scam Detector                 │  ← MAIN AGENT (Copilot Studio)
-│  • Seller age & review check          │
-│  • Price anomaly detection            │
-│  • Suspicious URL analysis            │
-│  • Fake image verification ───────────┼──→ Azure AI Foundry (GPT-4o Vision)
-│  • Risk score: Low/Medium/High/Crit.  │
-│  • HITL approval for high-risk buys   │
-└───────────────────────────────────────┘
-            │
-            ▼ Azure Speech TTS
-       User hears the alert
+```mermaid
+flowchart TD
+    U([🎙️ User\nVoice / Text]) --> STT
+
+    STT["Azure Speech Services\nSpeech-to-Text"]
+    STT --> ORC
+
+    ORC["🤖 EchoWard Orchestrator\nMicrosoft Copilot Studio\nIntent classification & routing"]
+    ORC --> SA
+    ORC --> SD
+
+    SA["🛒 Shopping Assistant\nMicrosoft Copilot Studio\nProduct search & results"]
+    SA --> SD
+
+    SD["🔍 Scam Detector\n★ MAIN AGENT ★\nMicrosoft Copilot Studio"]
+    SD --> RS
+    SD --> URL
+    SD --> IMG
+    SD --> HITL
+
+    RS["📊 Risk Scoring Engine\nPrice anomaly · Seller age\nReview count · Return policy"]
+    URL["🔗 URL Safety Check\nAzure Content Safety\nPhishing & typosquatting detection"]
+    IMG["🖼️ Fake Image Detection\nAzure AI Foundry\nGPT-4o Vision"]
+    HITL["🧑 Human-in-the-Loop\nHigh / Critical risk:\nUser confirms before purchase"]
+
+    SD --> TTS
+    TTS["Azure Speech Services\nText-to-Speech"]
+    TTS --> UO([🔊 User hears\nsafe recommendation\nor scam alert])
+
+    style U fill:#e8f0fe,stroke:#1a73e8,color:#1a1a2e
+    style UO fill:#e8f5e9,stroke:#2e7d32,color:#1a1a2e
+    style ORC fill:#e8f0fe,stroke:#1a73e8,color:#1a1a2e
+    style SA fill:#e8f0fe,stroke:#1a73e8,color:#1a1a2e
+    style SD fill:#fff3e0,stroke:#e65100,color:#1a1a2e
+    style RS fill:#fff8e1,stroke:#f57f17,color:#1a1a2e
+    style URL fill:#fff8e1,stroke:#f57f17,color:#1a1a2e
+    style IMG fill:#fff8e1,stroke:#f57f17,color:#1a1a2e
+    style HITL fill:#ffebee,stroke:#c62828,color:#1a1a2e
+    style STT fill:#f3e5f5,stroke:#6a1b9a,color:#1a1a2e
+    style TTS fill:#f3e5f5,stroke:#6a1b9a,color:#1a1a2e
 ```
 
 ---
