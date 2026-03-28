@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EchoWard - Your voice, your shield.</title>
+  <meta name="description" content="EchoWard shopping safety demo with product comparison, chat mode, and voice mode.">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+  <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🛡️</span>
+        <div>
+          <h1>EchoWard</h1>
+          <p class="tagline">Your voice, your shield.</p>
+        </div>
+      </div>
+      <div class="header-badge">AI for Good Hackathon 2026</div>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <section class="catalog-panel" aria-label="Product display area">
+      <div class="catalog-hero">
+        <span class="eyebrow">Shopping Safety Grid</span>
+        <h2>Review products side by side while EchoWard stays available in chat or voice.</h2>
+        <p>
+          The product area adapts automatically from the shared fields and lets the assistant stay focused on
+          risk questions, seller trust, and safer purchase decisions.
+        </p>
+      </div>
+
+      <div class="summary-strip">
+        <div class="summary-card">
+          <strong id="product-count">0</strong>
+          <span>Products in view</span>
+        </div>
+        <div class="summary-card">
+          <strong id="verified-count">0</strong>
+          <span>Verified sellers</span>
+        </div>
+        <div class="summary-card">
+          <strong id="platform-count">0</strong>
+          <span>Platforms compared</span>
+        </div>
+      </div>
+
+      <div id="product-grid" class="product-grid"></div>
+    </section>
+
+    <aside class="assistant-panel" aria-label="EchoWard assistant panel">
+      <div class="assistant-header">
+        <span class="eyebrow">Assistant Panel</span>
+        <h2>EchoWard is ready</h2>
+        <p>Switch between typed chat and voice guidance without leaving the product grid.</p>
+      </div>
+
+      <div class="mode-toggle">
+        <button id="chat-mode-button" class="active" type="button">Chat mode</button>
+        <button id="voice-mode-button" type="button">Voice mode</button>
+      </div>
+
+      <div id="status" class="status-bar warn">Connecting to EchoWard...</div>
+
+      <div id="messages" class="messages" aria-live="polite">
+        <div class="message bot">
+          EchoWard is online. Ask about any listing on the left or switch to voice mode when you are ready.
+        </div>
+      </div>
+
+      <div class="assistant-controls">
+        <div id="chat-controls" class="control-panel active">
+          <div class="quick-actions" id="quick-actions"></div>
+          <div class="chat-composer">
+            <input id="chat-input" type="text" placeholder="Ask EchoWard about a product..." autocomplete="off">
+            <button id="send-button" type="button">Send</button>
+          </div>
+        </div>
+
+        <div id="voice-controls" class="control-panel">
+          <div class="voice-panel">
+            <button id="mic-button" class="mic-orb" type="button" aria-label="Start listening">Mic</button>
+            <p class="voice-copy">Use voice mode for speech input and spoken responses with Aria.</p>
+            <div id="transcript-box" class="transcript-box">Your latest transcript will appear here.</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
