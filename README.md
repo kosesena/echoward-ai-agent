@@ -7,9 +7,9 @@
 **March 27–28, 2026 | Online Event**
 
 <p align="center">
-  <img src="assets/microsoft-logo.svg" alt="Microsoft" height="40" style="margin-right:24px"/>
+  <img src="assets/microsoft-logo.svg" alt="Microsoft" height="40"/>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="assets/ubitech-logo.svg" alt="Ubitech" height="40"/>
+  <img src="assets/ubitech-logo-dark.png" alt="Ubitech" height="40"/>
 </p>
 
 Built with **Microsoft Copilot Studio** | **Azure Speech Services**
