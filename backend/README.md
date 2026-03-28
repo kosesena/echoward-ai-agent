@@ -1,102 +1,54 @@
-# Backend — Scam Risk Scorer
+# Backend
 
-This module contains the core risk scoring logic for EchoWard's Scam Detector. It is designed to:
-
-1. **Run locally** for testing and development
-2. **Serve as the reference implementation** for the Power Automate flow / Azure Function deployed in Copilot Studio
-
----
+This folder contains the local backend pieces used by EchoWard.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `risk_scorer.py` | Core risk scoring engine — input/output schema + scoring logic |
+| `risk_scorer.py` | Core scam risk scoring logic used as a local reference implementation |
+| `token_bridge.py` | Local static server plus Direct Line token bridge for custom voice mode |
 
----
+## Risk Scorer
 
-## Quick Start
+Run the sample scorer locally with:
 
 ```bash
 python backend/risk_scorer.py
 ```
 
-This runs 4 test cases (2 safe, 1 medium, 1 critical) and prints the risk level and voice alert for each.
+## Voice Mode Token Bridge
 
-**Expected output:**
-```
-Product: Sony WH-CH510 Wireless Headphones
-Risk:    Low (score: 0)
+The custom `Voice mode` in [`index.html`](../index.html) expects a backend endpoint at `/api/copilot-token`.
+`token_bridge.py` provides that endpoint and also serves the site at `http://localhost:8000`.
 
-Product: Generic Bluetooth Speaker XL
-Risk:    Medium (score: 2)
+### Run it locally
 
-Product: Samsung Galaxy Watch 5 — Limited Deal
-Risk:    Critical (score: 9)
+PowerShell:
 
-Product: Apple AirPods Pro 2nd Gen — Clearance
-Risk:    Critical (score: 10)
+```powershell
+$env:COPILOT_DIRECT_LINE_SECRET="your-direct-line-secret"
+python backend/token_bridge.py
 ```
 
----
+Then open:
 
-## Risk Scoring Logic
-
-| Signal | Points |
-|---|---|
-| Price 50–70% below market | +1 |
-| Price 70–80% below market | +2 |
-| Price >80% below market | +3 |
-| Seller age 7–30 days | +1 |
-| Seller age <7 days | +2 |
-| Zero reviews | +1 |
-| <10 reviews | +1 |
-| No return policy | +1 |
-| Suspicious URL pattern | +2 |
-| Image not authentic (GPT-4o Vision) | +3 |
-
-| Total Score | Risk Level |
-|---|---|
-| 0–1 | Low |
-| 2–3 | Medium |
-| 4–5 | High |
-| 6+ | Critical |
-
----
-
-## Integration with Copilot Studio
-
-The `risk_scorer.py` logic is replicated in a **Power Automate flow** (or Azure Function) that the Scam Detector agent calls as an action.
-
-**Input (from Copilot Studio):**
-```json
-{
-  "product_name": "string",
-  "listed_price": 0.00,
-  "market_avg_price": 0.00,
-  "seller_name": "string",
-  "seller_age_days": 0,
-  "review_count": 0,
-  "has_return_policy": true,
-  "product_url": "string",
-  "image_authentic": true,
-  "image_note": "string or null"
-}
+```text
+http://localhost:8000
 ```
 
-**Output (to Copilot Studio):**
-```json
-{
-  "risk_level": "Low | Medium | High | Critical",
-  "score": 0,
-  "reasons": ["list of plain-language explanations"],
-  "recommendation": "string",
-  "echoward_voice_alert": "string — ready to speak directly to the user"
-}
+Optional health check:
+
+```text
+http://localhost:8000/api/health
 ```
 
----
+If your bot uses a regional Direct Line endpoint, you can override it:
 
-## Owner
+```powershell
+$env:DIRECT_LINE_BASE_URL="https://europe.directline.botframework.com"
+```
 
-**Scam logic / backend role** — see team assignments in [README.md](../README.md).
+### Why this exists
+
+The browser should not hold the Copilot Studio Direct Line secret. The token bridge keeps the secret on the server side and returns only a short-lived token to the page.
