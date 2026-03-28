@@ -3,221 +3,786 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EchoWard Web App Modes</title>
-  <meta name="description" content="EchoWard demo with Copilot Studio embed mode and custom voice mode.">
+  <title>EchoWard Shopping Safety Assistant</title>
+  <meta name="description" content="EchoWard split-screen shopping safety demo with product grid and AI assistant.">
   <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
   <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
   <style>
     :root {
-      --brand: #0078d4;
-      --bg: #eef5fc;
+      --bg: #eef4fb;
+      --surface: rgba(255, 255, 255, 0.92);
       --panel: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --border: #d8e0ea;
-      --warn-bg: #fff7ed;
-      --warn-text: #7a2e0b;
-      --ok-bg: #ecfdf3;
-      --ok-text: #0f5132;
-      --error-bg: #fef3f2;
-      --error-text: #b42318;
+      --panel-strong: #f7fbff;
+      --text: #102033;
+      --muted: #5f7082;
+      --border: #d8e3ef;
+      --brand: #0f6cbd;
+      --brand-soft: #dceeff;
+      --ok: #198754;
+      --ok-soft: #e9f8ef;
+      --warn: #b85b00;
+      --warn-soft: #fff4e8;
+      --danger: #c4342b;
+      --danger-soft: #fff0ef;
+      --shadow: 0 18px 40px rgba(21, 45, 76, 0.12);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html, body {
+      height: 100%;
+    }
+
     body {
       margin: 0;
+      overflow: hidden;
       font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(180deg, var(--bg) 0%, #f7fbff 100%);
       color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(15, 108, 189, 0.14), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.12), transparent 26%),
+        linear-gradient(180deg, #eef4fb 0%, #f8fbff 100%);
     }
 
-    .shell {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 32px 20px;
+    .app {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(360px, 1fr);
+      gap: 18px;
+      height: 100vh;
+      padding: 18px;
     }
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: 2rem;
+    .products-shell,
+    .assistant-shell {
+      min-height: 0;
+      border: 1px solid rgba(216, 227, 239, 0.9);
+      border-radius: 28px;
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
     }
 
-    p {
+    .products-shell {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      padding: 22px;
+      gap: 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+    }
+
+    .hero h1 {
+      margin: 12px 0 8px;
+      font-size: clamp(1.9rem, 2.5vw, 3rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 720px;
+      line-height: 1.55;
+    }
+
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .summary-card {
+      padding: 14px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), #f8fbff);
+    }
+
+    .summary-card strong {
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+    }
+
+    .summary-card span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-auto-rows: 1fr;
+      gap: 14px;
+      min-height: 0;
+      align-content: start;
+      overflow: hidden;
+    }
+
+    .product-card {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto auto;
+      gap: 10px;
+      min-height: 0;
+      padding: 14px;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #ffffff 0%, #f9fbfe 100%);
+    }
+
+    .card-topline,
+    .card-tags,
+    .rating-row,
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .label,
+    .tag,
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      padding: 0 9px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .label {
+      background: #edf5ff;
+      color: var(--brand);
+    }
+
+    .tag {
+      background: #eef2f6;
+      color: #425466;
+    }
+
+    .badge.verified {
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+
+    .badge.unverified {
+      background: #eef1f4;
+      color: #697889;
+    }
+
+    .product-card h2 {
+      margin: 0;
+      font-size: 0.94rem;
+      line-height: 1.28;
+      letter-spacing: -0.01em;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .price {
+      font-size: 1.38rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .original-price {
+      color: var(--muted);
+      text-decoration: line-through;
+      font-size: 0.86rem;
+    }
+
+    .seller-line,
+    .detail-text {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .rating-block {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .rating-label {
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    .stars {
+      color: #f59e0b;
+      font-size: 0.84rem;
+      letter-spacing: 0.04em;
+    }
+
+    .stars small {
+      color: var(--muted);
+      margin-left: 6px;
+      font-size: 0.76rem;
+      letter-spacing: 0;
+    }
+
+    .assistant-shell {
+      display: grid;
+      grid-template-rows: auto auto auto 1fr auto;
+      position: relative;
+    }
+
+    .assistant-header {
+      padding: 22px 22px 14px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), #f5faff);
+    }
+
+    .assistant-header h2 {
+      margin: 10px 0 8px;
+      font-size: 1.45rem;
+    }
+
+    .assistant-header p {
       margin: 0;
       color: var(--muted);
       line-height: 1.5;
+      font-size: 0.94rem;
     }
 
-    .mode-switcher {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
+    .mode-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel-strong);
     }
 
-    .mode-button,
-    .toolbar button {
+    .mode-toggle button,
+    .chat-composer button,
+    .mic-orb,
+    .quick-action {
       appearance: none;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: #fff;
-      color: var(--text);
-      padding: 9px 16px;
+      border: none;
       cursor: pointer;
       font: inherit;
     }
 
-    .mode-button.active {
+    .mode-toggle button {
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: #eaf1f8;
+      color: #496173;
+      font-weight: 700;
+    }
+
+    .mode-toggle button.active {
       background: var(--brand);
-      color: #fff;
-      border-color: var(--brand);
+      color: white;
     }
 
-    .card {
-      margin-top: 18px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-    }
-
-    .status {
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.95rem;
-    }
-
-    .status.ok {
-      color: var(--ok-text);
-      background: var(--ok-bg);
-    }
-
-    .status.warn {
-      color: var(--warn-text);
-      background: var(--warn-bg);
-    }
-
-    .status.error {
-      color: var(--error-text);
-      background: var(--error-bg);
-    }
-
-    .toolbar {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
+    .status-bar {
       padding: 12px 18px;
+      font-size: 0.9rem;
       border-bottom: 1px solid var(--border);
-      background: #fbfdff;
     }
 
-    .panel {
+    .status-bar.ok {
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+
+    .status-bar.warn {
+      background: var(--warn-soft);
+      color: var(--warn);
+    }
+
+    .status-bar.error {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .messages {
+      min-height: 0;
+      overflow: auto;
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+      background:
+        radial-gradient(circle at top right, rgba(15, 108, 189, 0.08), transparent 25%),
+        linear-gradient(180deg, #fbfdff 0%, #f7faff 100%);
+    }
+
+    .message {
+      max-width: 92%;
+      padding: 12px 14px;
+      border-radius: 18px;
+      line-height: 1.48;
+      font-size: 0.94rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .message.bot {
+      justify-self: start;
+      background: white;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 24px rgba(16, 32, 51, 0.06);
+    }
+
+    .message.user {
+      justify-self: end;
+      background: #dff0ff;
+      color: #103a60;
+    }
+
+    .assistant-controls {
+      padding: 16px 18px 18px;
+      border-top: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.98);
+    }
+
+    .control-panel {
       display: none;
     }
 
-    .panel.active {
+    .control-panel.active {
       display: block;
     }
 
-    iframe {
-      display: block;
-      width: 100%;
-      height: 78vh;
-      min-height: 620px;
-      border: 0;
+    .voice-panel {
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      text-align: center;
     }
 
-    #webchat {
-      height: 72vh;
-      min-height: 540px;
+    .mic-orb {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, #65b2ff, var(--brand));
+      box-shadow:
+        0 0 0 12px rgba(15, 108, 189, 0.08),
+        0 18px 40px rgba(15, 108, 189, 0.28);
+      color: white;
+      font-size: 2rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .note {
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border);
-      background: #fbfdff;
+    .mic-orb:hover,
+    .mic-orb.listening {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow:
+        0 0 0 18px rgba(15, 108, 189, 0.12),
+        0 22px 44px rgba(15, 108, 189, 0.34);
+    }
+
+    .voice-panel h3,
+    .chat-panel h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .voice-panel p,
+    .chat-panel p,
+    .transcript-box,
+    .quick-actions {
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
+    }
+
+    .transcript-box {
+      width: 100%;
+      min-height: 52px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px dashed var(--border);
+      background: #fbfdff;
+      text-align: left;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .quick-action {
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: #edf5ff;
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    .chat-panel {
+      display: grid;
+      gap: 12px;
+    }
+
+    .chat-composer {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chat-composer input {
+      width: 100%;
+      min-width: 0;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #f9fbfe;
+      color: var(--text);
+      font: inherit;
+    }
+
+    .chat-composer button {
+      min-width: 92px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: var(--brand);
+      color: white;
+      font-weight: 700;
+    }
+
+    .chat-composer button:disabled,
+    .mode-toggle button:disabled,
+    .quick-action:disabled,
+    .mic-orb:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
     }
   </style>
 </head>
 <body>
-  <main class="shell">
-    <h1>EchoWard</h1>
-    <p>
-      Use the built-in Copilot Studio embed for the fastest demo, or switch to voice mode for custom
-      Azure STT and TTS with `en-US-AriaNeural`.
-    </p>
-
-    <div class="mode-switcher">
-      <button id="embed-mode-button" class="mode-button active" type="button">Embed mode</button>
-      <button id="voice-mode-button" class="mode-button" type="button">Voice mode</button>
-    </div>
-
-    <section class="card">
-      <div id="embed-panel" class="panel active">
-        <div class="note">
-          Official Copilot Studio iframe embed. Best for a quick demo and closest to the product's built-in web app flow.
+  <main class="app">
+    <section class="products-shell" aria-label="Product results">
+      <div class="hero">
+        <div>
+          <span class="eyebrow">EchoWard Shopping Monitor</span>
+          <h1>Safer shopping choices, reviewed side by side in real time.</h1>
+          <p>
+            EchoWard watches product listings for risky pricing, weak seller history, and refund red flags
+            while staying available in voice or chat on the right.
+          </p>
         </div>
-        <iframe
-          src="https://copilotstudio.microsoft.com/environments/8f8480ad-82f6-ea21-b4e7-7f4ced9a4a4c/bots/cra2a_EchoWardOrchestratorFlow/webchat?__version__=2"
-          title="EchoWard Copilot Studio Web Chat"
-          allow="microphone"
-        ></iframe>
       </div>
 
-      <div id="voice-panel" class="panel">
-        <div id="status" class="status warn">Voice mode is idle. Connects through Direct Line and Azure Speech.</div>
-        <div class="toolbar">
-          <button id="mic-button" type="button">Start listening</button>
-          <button id="voice-toggle" type="button" aria-pressed="true">Voice on</button>
+      <div class="summary-strip">
+        <div class="summary-card">
+          <strong id="product-count">0</strong>
+          <span>Products in view</span>
         </div>
-        <div id="webchat" role="main" aria-label="EchoWard custom voice chat"></div>
+        <div class="summary-card">
+          <strong id="verified-count">0</strong>
+          <span>Verified sellers</span>
+        </div>
+        <div class="summary-card">
+          <strong id="platform-count">0</strong>
+          <span>Platforms compared</span>
+        </div>
       </div>
+
+      <div id="product-grid" class="product-grid"></div>
     </section>
+
+    <aside class="assistant-shell" aria-label="EchoWard assistant">
+      <div class="assistant-header">
+        <span class="eyebrow">AI Assistant</span>
+        <h2>EchoWard is ready</h2>
+        <p>
+          Switch between chat and voice instantly. Voice mode uses Azure Speech for STT and TTS, while both
+          modes share the same EchoWard conversation.
+        </p>
+      </div>
+
+      <div class="mode-toggle">
+        <button id="chat-mode-button" class="active" type="button">Chat Mode</button>
+        <button id="voice-mode-button" type="button">Voice Mode</button>
+      </div>
+
+      <div id="status" class="status-bar warn">Connecting to EchoWard...</div>
+
+      <div id="messages" class="messages" aria-live="polite">
+        <div class="message bot">EchoWard is online. Ask about any item in the grid or start speaking when voice mode is ready.</div>
+      </div>
+
+      <div class="assistant-controls">
+        <div id="chat-controls" class="control-panel active">
+          <div class="chat-panel">
+            <h3>Type your question</h3>
+            <p>Try asking which listing looks safest, whether a seller is suspicious, or what warning signs matter most.</p>
+            <div class="quick-actions" id="quick-actions"></div>
+            <div class="chat-composer">
+              <input id="chat-input" type="text" placeholder="Ask EchoWard about a product..." autocomplete="off">
+              <button id="send-button" type="button">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="voice-controls" class="control-panel">
+          <div class="voice-panel">
+            <h3>Talk to EchoWard</h3>
+            <p>Use the microphone orb to ask about the products on the left. EchoWard will answer aloud with Aria.</p>
+            <button id="mic-button" class="mic-orb" type="button" aria-label="Start listening">Mic</button>
+            <div id="transcript-box" class="transcript-box">Your latest transcript will appear here.</div>
+          </div>
+        </div>
+      </div>
+    </aside>
   </main>
 
   <script>
-    const iframeUrl = "https://copilotstudio.microsoft.com/environments/8f8480ad-82f6-ea21-b4e7-7f4ced9a4a4c/bots/cra2a_EchoWardOrchestratorFlow/webchat?__version__=2";
+    const products = [
+      {
+        "product_id": "P001",
+        "product_name": "Sony WH-1000XM5 Wireless Headphones",
+        "category": "Electronics",
+        "price": 249.99,
+        "original_price": 279.99,
+        "seller_name": "SonyOfficialStore",
+        "seller_rating": 4.8,
+        "seller_review_count": 12500,
+        "product_rating": 4.7,
+        "product_review_count": 8900,
+        "is_verified_seller": true,
+        "seller_days_on_platform": 1825,
+        "return_policy": "30-day free return",
+        "platform": "Amazon"
+      },
+      {
+        "product_id": "P002",
+        "product_name": "Sony WH-1000XM5 Wireless Headphones",
+        "category": "Electronics",
+        "price": 49.99,
+        "original_price": 279.99,
+        "seller_name": "BestDeals2024",
+        "seller_rating": 2.1,
+        "seller_review_count": 12,
+        "product_rating": 3.2,
+        "product_review_count": 8,
+        "is_verified_seller": false,
+        "seller_days_on_platform": 14,
+        "return_policy": "No returns",
+        "platform": "eBay"
+      },
+      {
+        "product_id": "P003",
+        "product_name": "Nike Air Max 270",
+        "category": "Footwear",
+        "price": 129.99,
+        "original_price": 150.00,
+        "seller_name": "NikeOfficial",
+        "seller_rating": 4.9,
+        "seller_review_count": 25000,
+        "product_rating": 4.6,
+        "product_review_count": 15000,
+        "is_verified_seller": true,
+        "seller_days_on_platform": 3650,
+        "return_policy": "60-day free return",
+        "platform": "Nike.com"
+      },
+      {
+        "product_id": "P004",
+        "product_name": "iPhone 15 Pro",
+        "category": "Electronics",
+        "price": 199.99,
+        "original_price": 999.99,
+        "seller_name": "TechSuper99",
+        "seller_rating": 1.8,
+        "seller_review_count": 5,
+        "product_rating": 2.5,
+        "product_review_count": 3,
+        "is_verified_seller": false,
+        "seller_days_on_platform": 7,
+        "return_policy": "No returns",
+        "platform": "eBay"
+      },
+      {
+        "product_id": "P005",
+        "product_name": "Samsung 65\" 4K Smart TV",
+        "category": "Electronics",
+        "price": 799.99,
+        "original_price": 899.99,
+        "seller_name": "SamsungStore",
+        "seller_rating": 4.7,
+        "seller_review_count": 9800,
+        "product_rating": 4.5,
+        "product_review_count": 6700,
+        "is_verified_seller": true,
+        "seller_days_on_platform": 2190,
+        "return_policy": "30-day free return",
+        "platform": "Amazon"
+      },
+      {
+        "product_id": "P006",
+        "product_name": "Rolex Submariner Watch",
+        "category": "Accessories",
+        "price": 299.99,
+        "original_price": 9500.00,
+        "seller_name": "LuxuryDealsShop",
+        "seller_rating": 2.3,
+        "seller_review_count": 18,
+        "product_rating": 2.8,
+        "product_review_count": 11,
+        "is_verified_seller": false,
+        "seller_days_on_platform": 21,
+        "return_policy": "No returns",
+        "platform": "Trendyol"
+      }
+    ];
+
     const tokenEndpoint = "/api/copilot-token";
     const directLineDomain = "https://europe.directline.botframework.com/v3/directline";
     const speechKey = "758afc79580b488193eea71f5dd347e9";
     const speechRegion = "swedencentral";
     const speechVoice = "en-US-AriaNeural";
 
-    const embedModeButton = document.getElementById("embed-mode-button");
+    const productGrid = document.getElementById("product-grid");
+    const productCountEl = document.getElementById("product-count");
+    const verifiedCountEl = document.getElementById("verified-count");
+    const platformCountEl = document.getElementById("platform-count");
+    const chatModeButton = document.getElementById("chat-mode-button");
     const voiceModeButton = document.getElementById("voice-mode-button");
-    const embedPanel = document.getElementById("embed-panel");
-    const voicePanel = document.getElementById("voice-panel");
+    const chatControls = document.getElementById("chat-controls");
+    const voiceControls = document.getElementById("voice-controls");
     const statusEl = document.getElementById("status");
+    const messagesEl = document.getElementById("messages");
+    const chatInput = document.getElementById("chat-input");
+    const sendButton = document.getElementById("send-button");
+    const quickActionsEl = document.getElementById("quick-actions");
     const micButton = document.getElementById("mic-button");
-    const voiceToggleButton = document.getElementById("voice-toggle");
+    const transcriptBox = document.getElementById("transcript-box");
 
-    let voiceEnabled = true;
+    let assistantMode = "chat";
     let speechSynthesizer;
     let directLine;
     let conversationReady = false;
     let isListening = false;
-    let voiceModeInitialized = false;
 
-    function setActiveMode(mode) {
-      const embedActive = mode === "embed";
-      embedPanel.classList.toggle("active", embedActive);
-      voicePanel.classList.toggle("active", !embedActive);
-      embedModeButton.classList.toggle("active", embedActive);
-      voiceModeButton.classList.toggle("active", !embedActive);
+    const quickPrompts = [
+      "Which product looks safest here?",
+      "Check the suspicious sellers for me.",
+      "Compare the verified sellers only."
+    ];
 
-      if (!embedActive && !voiceModeInitialized) {
-        startWebChat();
+    function formatCurrency(value) {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+      }).format(value);
+    }
+
+    function formatNumber(value) {
+      return new Intl.NumberFormat("en-US").format(value);
+    }
+
+    function formatMembership(days) {
+      if (days >= 365) {
+        const years = Math.round(days / 365);
+        return `Member for ${years} year${years === 1 ? "" : "s"}`;
       }
+
+      if (days >= 30) {
+        const months = Math.round(days / 30);
+        return `Member for ${months} month${months === 1 ? "" : "s"}`;
+      }
+
+      return `Member for ${days} day${days === 1 ? "" : "s"}`;
+    }
+
+    function renderStars(value) {
+      const fullStars = Math.round(value);
+      return `${"&#9733;".repeat(fullStars)}${"&#9734;".repeat(5 - fullStars)}`;
+    }
+
+    function renderProducts(items) {
+      productCountEl.textContent = formatNumber(items.length);
+      verifiedCountEl.textContent = formatNumber(items.filter(item => item.is_verified_seller).length);
+      platformCountEl.textContent = formatNumber(new Set(items.map(item => item.platform)).size);
+
+      productGrid.innerHTML = items.map(item => `
+        <article class="product-card">
+          <div class="card-topline">
+            <span class="label">${item.category}</span>
+            <span class="tag">${item.platform}</span>
+          </div>
+          <h2>${item.product_name}</h2>
+          <div>
+            <div class="price-row">
+              <span class="price">${formatCurrency(item.price)}</span>
+              ${item.original_price > item.price ? `<span class="original-price">${formatCurrency(item.original_price)}</span>` : ""}
+            </div>
+            <div class="seller-line">Sold by <strong>${item.seller_name}</strong></div>
+          </div>
+          <div class="rating-row">
+            <div class="rating-block">
+              <span class="rating-label">Seller rating</span>
+              <span class="stars">${renderStars(item.seller_rating)}<small>${item.seller_rating.toFixed(1)} | ${formatNumber(item.seller_review_count)} reviews</small></span>
+            </div>
+            <div class="rating-block">
+              <span class="rating-label">Product rating</span>
+              <span class="stars">${renderStars(item.product_rating)}<small>${item.product_rating.toFixed(1)} | ${formatNumber(item.product_review_count)} reviews</small></span>
+            </div>
+          </div>
+          <div class="meta-row">
+            <span class="badge ${item.is_verified_seller ? "verified" : "unverified"}">
+              ${item.is_verified_seller ? "Verified" : "Unverified"}
+            </span>
+            <span class="detail-text">${formatMembership(item.seller_days_on_platform)}</span>
+          </div>
+          <div class="detail-text">Return policy: ${item.return_policy}</div>
+        </article>
+      `).join("");
+    }
+
+    function setAssistantMode(mode) {
+      assistantMode = mode;
+      const chatActive = mode === "chat";
+      chatModeButton.classList.toggle("active", chatActive);
+      voiceModeButton.classList.toggle("active", !chatActive);
+      chatControls.classList.toggle("active", chatActive);
+      voiceControls.classList.toggle("active", !chatActive);
     }
 
     function setStatus(message, type) {
       statusEl.textContent = message;
-      statusEl.className = "status" + (type ? " " + type : "");
+      statusEl.className = "status-bar" + (type ? " " + type : "");
     }
 
     function describeError(error) {
@@ -240,9 +805,12 @@
       }
     }
 
-    function updateVoiceToggleLabel() {
-      voiceToggleButton.textContent = voiceEnabled ? "Voice on" : "Voice off";
-      voiceToggleButton.setAttribute("aria-pressed", String(voiceEnabled));
+    function appendMessage(role, text) {
+      const bubble = document.createElement("div");
+      bubble.className = `message ${role}`;
+      bubble.textContent = text;
+      messagesEl.appendChild(bubble);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
     function getSpeechSynthesizer() {
@@ -270,25 +838,14 @@
       return speechConfig;
     }
 
-    function setMicButtonState() {
-      if (!conversationReady) {
-        micButton.disabled = true;
-        micButton.textContent = "Chat unavailable";
-        return;
-      }
-
-      if (!getSpeechConfig()) {
-        micButton.disabled = true;
-        micButton.textContent = "Add Speech key";
-        return;
-      }
-
-      micButton.disabled = false;
-      micButton.textContent = isListening ? "Listening..." : "Start listening";
+    function updateControlsState() {
+      sendButton.disabled = !conversationReady || !chatInput.value.trim();
+      micButton.disabled = !conversationReady || !getSpeechConfig();
+      micButton.classList.toggle("listening", isListening);
     }
 
     async function speakText(text) {
-      if (!voiceEnabled || !text) {
+      if (assistantMode !== "voice" || !text) {
         return;
       }
 
@@ -344,10 +901,12 @@
       });
     }
 
-    async function sendUserMessage(text) {
+    async function postMessageToBot(text) {
       if (!directLine) {
         throw new Error("Direct Line connection is not ready.");
       }
+
+      appendMessage("user", text);
 
       await new Promise((resolve, reject) => {
         directLine.postActivity({
@@ -361,25 +920,45 @@
       });
     }
 
+    async function sendChatMessage(text) {
+      const message = text.trim();
+      if (!message || !conversationReady) {
+        return;
+      }
+
+      chatInput.value = "";
+      updateControlsState();
+      setStatus("EchoWard is reviewing your request...", "warn");
+
+      try {
+        await postMessageToBot(message);
+      } catch (error) {
+        console.error(error);
+        setStatus("Message failed: " + describeError(error), "error");
+      }
+    }
+
     async function startListening() {
       if (isListening || !conversationReady) {
         return;
       }
 
       isListening = true;
-      setMicButtonState();
+      updateControlsState();
+      transcriptBox.textContent = "Listening for your voice...";
       setStatus("Listening for your voice...", "ok");
 
       try {
         const transcript = await recognizeSpeechOnce();
-        setStatus('Heard: "' + transcript + '"', "ok");
-        await sendUserMessage(transcript);
+        transcriptBox.textContent = transcript;
+        await postMessageToBot(transcript);
       } catch (error) {
         console.error(error);
+        transcriptBox.textContent = "Voice capture did not complete.";
         setStatus("Speech input failed: " + describeError(error), "error");
       } finally {
         isListening = false;
-        setMicButtonState();
+        updateControlsState();
       }
     }
 
@@ -407,9 +986,8 @@
       return payload.token;
     }
 
-    async function startWebChat() {
-      voiceModeInitialized = true;
-      setStatus("Connecting to Copilot Studio...", "warn");
+    async function connectAssistant() {
+      setStatus("Connecting to EchoWard...", "warn");
 
       try {
         const token = await fetchDirectLineToken();
@@ -419,41 +997,37 @@
         });
 
         directLine.connectionStatus$.subscribe(status => {
-          const labels = {
-            0: "Uninitialized",
-            1: "Connecting",
-            2: "Online",
-            3: "ExpiredToken",
-            4: "FailedToConnect",
-            5: "Ended"
-          };
-
           if (status === 1) {
-            setStatus("Connecting to Copilot Studio...", "warn");
+            setStatus("Connecting to EchoWard...", "warn");
             return;
           }
 
           if (status === 2) {
-            setStatus("Connected. You can now test the Copilot Studio agent.", "ok");
+            conversationReady = true;
+            updateControlsState();
+            setStatus("Connected. Ask EchoWard about any product on the left.", "ok");
             return;
           }
 
           if (status === 3) {
-            setStatus("Copilot Studio connection expired the Direct Line token. Refresh the page to request a new one.", "error");
+            conversationReady = false;
+            updateControlsState();
+            setStatus("EchoWard token expired. Refresh the page to reconnect.", "error");
             return;
           }
 
           if (status === 4) {
-            setStatus("Copilot Studio failed to connect. Check publish status, authentication mode, and web channel security.", "error");
+            conversationReady = false;
+            updateControlsState();
+            setStatus("EchoWard failed to connect. Check publish status, authentication mode, and web channel security.", "error");
             return;
           }
 
           if (status === 5) {
-            setStatus("Copilot Studio connection ended.", "warn");
-            return;
+            conversationReady = false;
+            updateControlsState();
+            setStatus("EchoWard conversation ended.", "warn");
           }
-
-          setStatus("Copilot Studio connection status: " + (labels[status] || "Unknown"), "warn");
         });
 
         directLine.activity$.subscribe(async activity => {
@@ -465,52 +1039,58 @@
             return;
           }
 
+          appendMessage("bot", activity.text);
+          setStatus("EchoWard replied.", "ok");
+
           try {
             await speakText(activity.text);
           } catch (error) {
             console.error(error);
-            setStatus("Chat connected, but Azure voice playback failed: " + describeError(error), "error");
+            setStatus("Voice playback failed: " + describeError(error), "error");
           }
         });
-
-        window.WebChat.renderWebChat(
-          {
-            directLine,
-            styleOptions: {
-              accent: "#0078d4",
-              botAvatarInitials: "EW",
-              userAvatarInitials: "You",
-              bubbleBorderRadius: 14,
-              hideUploadButton: true
-            }
-          },
-          document.getElementById("webchat")
-        );
-
-        conversationReady = true;
-        setMicButtonState();
-        setStatus("Connected. You can now test the Copilot Studio agent.", "ok");
       } catch (error) {
         console.error(error);
         conversationReady = false;
-        setMicButtonState();
+        updateControlsState();
         setStatus("Connection failed: " + describeError(error), "error");
       }
     }
 
-    embedModeButton.addEventListener("click", () => setActiveMode("embed"));
-    voiceModeButton.addEventListener("click", () => setActiveMode("voice"));
-    voiceToggleButton.addEventListener("click", () => {
-      voiceEnabled = !voiceEnabled;
-      updateVoiceToggleLabel();
-    });
-    micButton.addEventListener("click", () => {
-      startListening();
-    });
+    function renderQuickActions() {
+      quickActionsEl.innerHTML = "";
 
-    updateVoiceToggleLabel();
-    setMicButtonState();
-    setActiveMode("embed");
+      quickPrompts.forEach(prompt => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "quick-action";
+        button.textContent = prompt;
+        button.addEventListener("click", () => {
+          chatInput.value = prompt;
+          updateControlsState();
+          sendChatMessage(prompt);
+        });
+        quickActionsEl.appendChild(button);
+      });
+    }
+
+    renderProducts(products);
+    renderQuickActions();
+    setAssistantMode("chat");
+    updateControlsState();
+    connectAssistant();
+
+    chatModeButton.addEventListener("click", () => setAssistantMode("chat"));
+    voiceModeButton.addEventListener("click", () => setAssistantMode("voice"));
+    sendButton.addEventListener("click", () => sendChatMessage(chatInput.value));
+    chatInput.addEventListener("input", updateControlsState);
+    chatInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendChatMessage(chatInput.value);
+      }
+    });
+    micButton.addEventListener("click", startListening);
   </script>
 </body>
 </html>
