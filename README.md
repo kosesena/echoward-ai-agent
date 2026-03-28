@@ -2,9 +2,17 @@
 
 > A voice-first AI agent that protects vulnerable users from online shopping scams in real time.
 
-**AI for Good Hackathon 2026 | March 27–28, 2026 | Online Event**
+## 🥈 2nd Place — AI for Good Hackathon 2026
 
-Built with **Microsoft Copilot Studio** | **Azure AI Foundry** | **Azure Speech Services**
+**March 27–28, 2026 | Online Event**
+
+<p align="center">
+  <img src="assets/microsoft-logo.svg" alt="Microsoft" height="40" style="margin-right:24px"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="assets/ubitech-logo.svg" alt="Ubitech" height="40"/>
+</p>
+
+Built with **Microsoft Copilot Studio** | **Azure Speech Services**
 
 ---
 
@@ -218,7 +226,12 @@ echoward-ai-agent/
 
 ## 👥 Team
 
-Alexandra · Ceren · Sarper · Sarper Kahvecioglu · Sena
+| | Name |
+|---|---|
+| 🧑‍💻 | Alexandra Salvanidou |
+| 🧑‍💻 | Sena Köse |
+| 🧑‍💻 | Sarper Arıkan |
+| 🧑‍💻 | Sarper Kahvecioğlu |
 
 ---
 
