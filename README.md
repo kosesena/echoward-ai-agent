@@ -86,52 +86,29 @@ flowchart TD
 
 ---
 
-## 👥 Team
+## 🚀 Running Locally
 
-Alexandra · Ceren · Sarper · Sarper Kahvecioglu · Sena
+The `index.html` at the repo root provides two modes: an embedded Copilot Studio iframe and a custom voice mode via Direct Line + Azure Speech.
 
-*Role assignments to be confirmed — 5 members, tasks TBD.*
+**Requirements:** Python 3.8+
 
----
+```powershell
+# 1. Set your Copilot Studio Direct Line secret
+$env:COPILOT_DIRECT_LINE_SECRET = "your-direct-line-secret"
 
-## ⏱️ Hackathon Build Order (Day 2)
+# 2. Start the token bridge server
+python backend/token_bridge.py
 
-| Phase | Time | Deliverable |
-|---|---|---|
-| Setup | 12:00 – 12:15 | GitHub access, Copilot Studio, Azure — all confirmed |
-| Phase 1 | 12:15 – 13:15 | Orchestrator + Scam Detector skeleton in Copilot Studio |
-| Phase 2 | 13:15 – 14:30 | Scam logic wired up, Shopping Assistant connected, HITL flow |
-| Phase 3 | 14:30 – 15:30 | Azure Foundry image check, Azure Speech voice I/O, frontend live |
-| Phase 4 | 15:30 – 16:15 | End-to-end test with demo scenario, pitch polish |
-| Pitch | 17:15 – 19:15 | Live demo + jury presentation |
-
----
-
-
-## 🗂️ Repo Structure
-
+# 3. Open http://localhost:8000 in your browser
 ```
-echoward-ai-agent/
-├── frontend/
-│   ├── index.html
-│   ├── style.css
-│   └── app.js
-├── backend/
-│   ├── risk_scorer.py
-│   └── README.md
-├── demo-data/
-│   ├── products.json
-│   └── scam_cases.json
-├── 00-Setup/
-├── 01-Copilot-Studio/
-│   ├── orchestrator/
-│   ├── shopping-assistant/
-│   └── scam-detector/
-├── 02-Azure-AI-Foundry/
-├── 03-Azure-Speech/
-├── supportdocs/
-└── use-cases/
-```
+
+The server:
+- Serves the repo root as a static website
+- Exchanges your Direct Line secret for short-lived tokens at `/api/copilot-token`
+- Health check available at `/api/health`
+
+> **Embed mode** — uses the built-in Copilot Studio iframe, no server needed.
+> **Voice mode** — requires the token bridge + an Azure Speech key set in `index.html`.
 
 ---
 
@@ -147,7 +124,7 @@ echoward-ai-agent/
 
 ---
 
-## 🗺️ Demo Scenario (Pitch)
+## 🗺️ Demo Scenario
 
 ```mermaid
 sequenceDiagram
@@ -179,6 +156,35 @@ sequenceDiagram
 
 ---
 
+## 🗂️ Repo Structure
+
+```
+echoward-ai-agent/
+├── index.html                  ← Web app (embed + voice mode)
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
+├── backend/
+│   ├── risk_scorer.py          ← Scam risk scoring engine
+│   ├── token_bridge.py         ← Local token bridge server
+│   └── README.md
+├── demo-data/
+│   ├── products.json
+│   └── scam_cases.json
+├── 00-Setup/
+├── 01-Copilot-Studio/
+│   ├── orchestrator/
+│   ├── shopping-assistant/
+│   └── scam-detector/
+├── 02-Azure-AI-Foundry/
+├── 03-Azure-Speech/
+├── supportdocs/
+└── use-cases/
+```
+
+---
+
 ## 🌍 Social Impact
 
 | SDG | EchoWard Contribution |
@@ -186,6 +192,33 @@ sequenceDiagram
 | SDG 10 — Reduced Inequalities | Gives vulnerable users the same protection as tech-savvy users |
 | SDG 16 — Peace, Justice & Strong Institutions | Actively combats financial exploitation |
 | SDG 3 — Good Health & Well-being | Reduces financial stress and anxiety from scams |
+
+---
+
+## 🔗 Useful Resources
+
+### Microsoft Copilot Studio
+- Portal: https://copilotstudio.microsoft.com/
+- Documentation: https://learn.microsoft.com/en-us/microsoft-copilot-studio/
+- Learning path: https://learn.microsoft.com/training/paths/work-power-virtual-agents/
+
+### Azure AI Foundry
+- Portal: https://ai.azure.com/
+- Documentation: https://learn.microsoft.com/azure/ai-foundry/
+
+### Azure Speech Services
+- Documentation: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/
+
+### Going Further
+- AI agent design patterns: https://learn.microsoft.com/azure/architecture/ai-ml/guide/ai-agent-design-patterns
+- Multi-Agent Custom Automation Engine: https://github.com/microsoft/Multi-Agent-Custom-Automation-Engine-Solution-Accelerator
+- Copilot Studio + Azure: https://github.com/Azure/Copilot-Studio-and-Azure
+
+---
+
+## 👥 Team
+
+Alexandra · Ceren · Sarper · Sarper Kahvecioglu · Sena
 
 ---
 
