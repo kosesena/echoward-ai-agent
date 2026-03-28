@@ -1,0 +1,49 @@
+{
+  "name": "EchoWard Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.pylance",
+        "ms-vscode.live-server",
+        "ritwickdey.LiveServer",
+        "esbenp.prettier-vscode",
+        "PKief.material-icon-theme",
+        "GitHub.copilot",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2,
+        "liveServer.settings.port": 5500,
+        "liveServer.settings.donotShowInfoMsg": true
+      }
+    }
+  },
+
+  "postCreateCommand": "pip install -r backend/requirements.txt 2>/dev/null || echo 'No requirements.txt yet, skipping pip install'",
+
+  "forwardPorts": [5500, 8000],
+
+  "portsAttributes": {
+    "5500": {
+      "label": "Frontend (Live Server)",
+      "onAutoForward": "openBrowser"
+    },
+    "8000": {
+      "label": "Backend (Python)",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "remoteUser": "vscode"
+}
