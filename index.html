@@ -4,112 +4,201 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EchoWard — Your voice, your shield.</title>
+  <meta name="description" content="EchoWard — a voice-first AI agent that protects vulnerable shoppers from online scams in real time." />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <!-- Scroll progress -->
+  <div class="scroll-progress" aria-hidden="true"></div>
+
   <!-- Header -->
   <header>
     <div class="header-inner">
-      <div class="logo">
-        <span class="logo-icon">🛡️</span>
-        <div>
-          <h1>EchoWard</h1>
-          <p class="tagline">Your voice, your shield.</p>
-        </div>
+      <a class="logo" href="#top" aria-label="EchoWard home">
+        <span class="logo-mark" aria-hidden="true">
+          <img class="lm-ring" src="assets/echoward-ring.png" alt="" />
+          <svg class="lm-wave" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="lmWave" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#5db4ff" />
+                <stop offset="1" stop-color="#1565d8" />
+              </linearGradient>
+            </defs>
+            <g fill="url(#lmWave)">
+              <rect x="27" y="39" width="4" height="22" rx="2" style="animation-duration:.95s;animation-delay:-.05s" />
+              <rect x="34" y="33" width="4" height="34" rx="2" style="animation-duration:1.25s;animation-delay:-.5s" />
+              <rect x="41" y="26" width="4" height="48" rx="2" style="animation-duration:.85s;animation-delay:-.2s" />
+              <rect x="48" y="21" width="4" height="58" rx="2" style="animation-duration:1.15s;animation-delay:-.8s" />
+              <rect x="55" y="26" width="4" height="48" rx="2" style="animation-duration:.95s;animation-delay:-.35s" />
+              <rect x="62" y="33" width="4" height="34" rx="2" style="animation-duration:1.3s;animation-delay:-.15s" />
+              <rect x="69" y="39" width="4" height="22" rx="2" style="animation-duration:.9s;animation-delay:-.6s" />
+            </g>
+          </svg>
+        </span>
+        <span class="wordmark">Echo<span class="wm-accent">Ward</span></span>
+      </a>
+      <div class="header-badge">
+        <span class="badge-dot" aria-hidden="true"></span>
+        <span class="badge-rank">2nd place</span><span class="badge-rest">, AI for Good Hackathon 2026</span>
       </div>
-      <div class="header-badge">AI for Good Hackathon 2026</div>
     </div>
   </header>
 
   <!-- Main -->
-  <main>
+  <main id="top">
 
-    <!-- Search Section -->
+    <!-- Hero -->
     <section class="search-section">
-      <h2>What would you like to buy today?</h2>
-      <p class="search-hint">Type or speak — EchoWard will find safe options for you.</p>
+      <div class="hero-tag">
+        <span class="aifg">
+          <span class="aifg-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          An AI for Good project
+        </span>
+      </div>
+      <span class="eyebrow">Protected shopping for everyone</span>
+      <h1 class="hero-title">Shop without<br />second-guessing —<br /><span class="accent-text">safely.</span></h1>
+      <p class="search-hint">Type or speak. EchoWard finds the options and quietly checks every one for scams — so you only ever choose from what's safe.</p>
 
       <div class="search-bar">
+        <span class="search-glyph" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
+        </span>
         <input
           type="text"
           id="searchInput"
-          placeholder='Try: "headphones under 40 euros" or "smartwatch"'
+          placeholder="Try &quot;headphones under 40 euros&quot; or &quot;smartwatch&quot;"
           autocomplete="off"
         />
-        <button id="voiceBtn" class="voice-btn" title="Speak">🎙️</button>
+        <button id="voiceBtn" class="voice-btn" title="Speak" aria-label="Search by voice">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0" /><path d="M12 18v3" /></svg>
+        </button>
         <button id="searchBtn" class="search-btn">Search</button>
       </div>
 
       <!-- Voice status indicator -->
       <div id="voiceStatus" class="voice-status hidden">
         <span class="pulse-dot"></span>
-        <span>Listening... speak now</span>
+        <span>Listening… speak now</span>
       </div>
 
       <!-- Quick suggestions -->
       <div class="suggestions">
-        <span class="suggestion-label">Try:</span>
         <button class="chip" data-query="headphones under 40 euros">headphones under €40</button>
         <button class="chip" data-query="smartwatch">smartwatch</button>
         <button class="chip" data-query="bluetooth speaker">bluetooth speaker</button>
         <button class="chip" data-query="earbuds">earbuds</button>
       </div>
+
+      <!-- Trust line -->
+      <p class="trust-row">
+        <span>Voice-first</span><span class="sep" aria-hidden="true">·</span>
+        <span>Real-time scam checks</span><span class="sep" aria-hidden="true">·</span>
+        <span>You always decide</span>
+      </p>
     </section>
 
-    <!-- EchoWard Status Bar -->
+    <!-- Status Bar -->
     <div id="statusBar" class="status-bar hidden">
-      <span class="status-icon">🔍</span>
-      <span id="statusText">Searching and checking safety...</span>
+      <span class="status-spinner" aria-hidden="true"></span>
+      <span id="statusText">Searching and checking safety…</span>
+      <span class="scan-track" aria-hidden="true"></span>
     </div>
 
-    <!-- Results Section -->
+    <!-- Results -->
     <section id="resultsSection" class="results-section hidden">
-
-      <!-- Recommendation Banner -->
       <div id="recommendationBanner" class="recommendation-banner hidden">
-        <div class="rec-icon">✅</div>
+        <span class="rec-rule" aria-hidden="true"></span>
         <div class="rec-text">
-          <strong>EchoWard Recommends</strong>
+          <strong>EchoWard's pick</strong>
           <span id="recommendedProduct"></span>
         </div>
       </div>
-
-      <!-- Results Grid -->
       <div id="resultsGrid" class="results-grid"></div>
-
     </section>
 
     <!-- How It Works -->
     <section class="how-it-works">
-      <h3>How EchoWard protects you</h3>
+      <h2 class="section-title" data-reveal>How EchoWard protects you</h2>
       <div class="steps">
-        <div class="step">
-          <div class="step-icon">🎙️</div>
-          <h4>You ask</h4>
-          <p>Tell EchoWard what you're looking for, by voice or text</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step">
-          <div class="step-icon">🔍</div>
-          <h4>We check</h4>
-          <p>Every listing is analyzed for price fraud, fake sellers, and suspicious URLs</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step">
-          <div class="step-icon">🛡️</div>
-          <h4>You decide safely</h4>
-          <p>Clear risk ratings and plain-language warnings — you always make the final call</p>
-        </div>
+
+        <article class="step" data-reveal>
+          <div class="step-screen" aria-hidden="true">
+            <div class="scr scr-ask">
+              <div class="ask-pill">
+                <span class="ask-mic"></span>
+                <span class="ask-eq"><i></i><i></i><i></i><i></i><i></i></span>
+              </div>
+              <span class="ask-cap">“headphones under €40”</span>
+            </div>
+          </div>
+          <span class="step-num">01</span>
+          <h3>You <span class="mark blue">ask</span></h3>
+          <p>Tell EchoWard what you're looking for, by voice or text.</p>
+        </article>
+
+        <article class="step" data-reveal style="transition-delay:.08s">
+          <div class="step-screen" aria-hidden="true">
+            <div class="scr scr-check">
+              <div class="chk-row"><span class="chk-ic"></span><span class="chk-name"></span><span class="chk-tag low">LOW</span></div>
+              <div class="chk-row"><span class="chk-ic"></span><span class="chk-name"></span><span class="chk-tag crit">RISK</span></div>
+              <div class="chk-row"><span class="chk-ic"></span><span class="chk-name"></span><span class="chk-tag low">LOW</span></div>
+              <span class="chk-beam"></span>
+            </div>
+          </div>
+          <span class="step-num">02</span>
+          <h3>We <span class="mark yellow">check</span></h3>
+          <p>Every listing is analyzed for price fraud, fake sellers, and suspicious URLs.</p>
+        </article>
+
+        <article class="step" data-reveal style="transition-delay:.16s">
+          <div class="step-screen" aria-hidden="true">
+            <div class="scr scr-decide">
+              <svg class="dec-ring" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <circle class="dr-track" cx="32" cy="32" r="26" />
+                <circle class="dr-fill" cx="32" cy="32" r="26" />
+              </svg>
+              <div class="dec-meta"><strong>100</strong><span>Safe to proceed</span></div>
+            </div>
+          </div>
+          <span class="step-num">03</span>
+          <h3>You decide <span class="mark green">safely</span></h3>
+          <p>Clear risk ratings and plain-language warnings — you always make the final call.</p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Partners -->
+    <section class="partners">
+      <span class="partner-cap" data-reveal>Partners</span>
+      <div class="partner-row" data-reveal style="transition-delay:.06s">
+        <img class="partner-logo ms" src="assets/microsoft-logo.svg" alt="Microsoft" width="99" height="33" />
+        <span class="partner-divider" aria-hidden="true"></span>
+        <img class="partner-logo ubi" src="assets/ubitech-logo.png" alt="Ubitech" />
       </div>
     </section>
 
   </main>
 
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-brand">EchoWard — Your voice, your shield.</span>
+      <span class="footer-meta">2nd place, AI for Good Hackathon 2026 · Microsoft Copilot Studio &amp; Azure Speech</span>
+    </div>
+  </footer>
+
   <!-- Warning Modal -->
   <div id="warningModal" class="modal-overlay hidden">
     <div class="modal">
-      <div class="modal-icon">⚠️</div>
+      <span class="modal-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 4 2 18.5A2 2 0 0 0 3.7 21.5h16.6a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0Z" /><path d="M12 9.5v4.2" /><path d="M12 17.3h.01" /></svg>
+      </span>
       <h2 id="modalTitle">High Risk Detected</h2>
       <div id="modalRiskBadge" class="risk-badge risk-critical">CRITICAL RISK</div>
       <p id="modalProductName" class="modal-product-name"></p>
@@ -123,10 +212,58 @@
   </div>
 
   <!-- Safe Proceed Toast -->
-  <div id="safeToast" class="toast hidden">
-    ✅ Great choice! Proceeding to checkout...
-  </div>
+  <div id="safeToast" class="toast hidden">Great choice — proceeding to checkout…</div>
 
   <script src="app.js"></script>
+
+  <!-- Progressive enhancement: scroll reveal.
+       Modern browsers use CSS scroll-driven animation (scrubbed by scroll);
+       this JS is only a fallback for browsers without animation-timeline. -->
+  <script>
+    (function () {
+      var supportsView = window.CSS && CSS.supports && CSS.supports('animation-timeline', 'view()');
+      if (supportsView) return;
+      var els = document.querySelectorAll('[data-reveal]');
+      if ('IntersectionObserver' in window && els.length) {
+        document.body.classList.add('reveal-ready');
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        els.forEach(function (el) { io.observe(el); });
+      }
+    })();
+  </script>
+
+  <!-- Animated placeholder in the search field -->
+  <script>
+    (function () {
+      var input = document.getElementById('searchInput');
+      if (!input) return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var DEFAULT = input.getAttribute('placeholder') || '';
+      var phrases = ['"headphones under 40 euros"', '"a smartwatch"', '"wireless earbuds"', '"a bluetooth speaker"', '"a gift under 50 euros"'];
+      var pi = 0, ci = 0, deleting = false;
+      var caret = ' ▎';
+      function idle() { return document.activeElement === input || input.value.length > 0; }
+      function tick() {
+        if (idle()) { input.placeholder = DEFAULT; setTimeout(tick, 600); return; }
+        var p = phrases[pi];
+        if (!deleting) {
+          ci++;
+          input.placeholder = 'Try ' + p.slice(0, ci) + caret;
+          if (ci >= p.length) { deleting = true; return setTimeout(tick, 1600); }
+          setTimeout(tick, 70 + Math.random() * 45);
+        } else {
+          ci--;
+          input.placeholder = 'Try ' + p.slice(0, Math.max(0, ci)) + caret;
+          if (ci <= 0) { deleting = false; pi = (pi + 1) % phrases.length; return setTimeout(tick, 380); }
+          setTimeout(tick, 38);
+        }
+      }
+      setTimeout(tick, 1300);
+    })();
+  </script>
 </body>
 </html>
