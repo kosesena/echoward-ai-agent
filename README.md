@@ -96,27 +96,28 @@ flowchart TD
 
 ## 🚀 Running Locally
 
-The `index.html` at the repo root provides two modes: an embedded Copilot Studio iframe and a custom voice mode via Direct Line + Azure Speech.
+The web demo lives in [`frontend/`](frontend/) — a self-contained, voice-first shopping UI with live, on-device scam scoring. No backend is required to try it.
 
 **Requirements:** Python 3.8+
 
-```powershell
-# 1. Set your Copilot Studio Direct Line secret
-$env:COPILOT_DIRECT_LINE_SECRET = "your-direct-line-secret"
-
-# 2. Start the token bridge server
-python backend/token_bridge.py
-
-# 3. Open http://localhost:8000 in your browser
+```bash
+# Serve the frontend, then open http://localhost:8000
+python3 -m http.server 8000 --directory frontend
 ```
 
-The server:
-- Serves the repo root as a static website
-- Exchanges your Direct Line secret for short-lived tokens at `/api/copilot-token`
-- Health check available at `/api/health`
+The page supports text **and** voice input (browser Speech API), accessible keyboard navigation, and a larger-text mode. Try the **▶ See it in action** button for a guided scam-catch walkthrough.
 
-> **Embed mode** — uses the built-in Copilot Studio iframe, no server needed.
-> **Voice mode** — requires the token bridge + an Azure Speech key set in `index.html`.
+### Optional — Copilot Studio voice mode
+
+To wire up the live Microsoft Copilot Studio assistant, run the token bridge — it exchanges your Direct Line secret for short-lived browser tokens:
+
+```bash
+export COPILOT_DIRECT_LINE_SECRET="your-direct-line-secret"
+python3 backend/token_bridge.py
+```
+
+- `GET /api/copilot-token` — short-lived Direct Line token for the voice client
+- `GET /api/health` — health check
 
 ---
 
@@ -168,14 +169,14 @@ sequenceDiagram
 
 ```
 echoward-ai-agent/
-├── index.html                  ← Web app (embed + voice mode)
-├── frontend/
+├── frontend/                   ← Web demo (voice-first UI + live scam scoring)
 │   ├── index.html
 │   ├── style.css
-│   └── app.js
+│   ├── app.js
+│   └── assets/                 ← EchoWard logo + partner marks
 ├── backend/
-│   ├── risk_scorer.py          ← Scam risk scoring engine
-│   ├── token_bridge.py         ← Local token bridge server
+│   ├── risk_scorer.py          ← Scam risk scoring engine (reference impl)
+│   ├── token_bridge.py         ← Direct Line token bridge (Copilot voice mode)
 │   └── README.md
 ├── demo-data/
 │   ├── products.json

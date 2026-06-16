@@ -6,12 +6,21 @@
   <title>EchoWard — Your voice, your shield.</title>
   <meta name="description" content="EchoWard — a voice-first AI agent that protects vulnerable shoppers from online scams in real time." />
   <meta name="theme-color" content="#0b0e14" />
+  <link rel="icon" type="image/png" href="assets/echoward-mark.png" />
+  <link rel="apple-touch-icon" href="assets/echoward-mark.png" />
+  <meta property="og:title" content="EchoWard — Your voice, your shield." />
+  <meta property="og:description" content="A voice-first AI agent that protects vulnerable shoppers from online scams in real time." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/echoward-logo.png" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <a class="skip-link" href="#searchInput">Skip to search</a>
 
   <!-- Scroll progress -->
   <div class="scroll-progress" aria-hidden="true"></div>
@@ -42,9 +51,14 @@
         </span>
         <span class="wordmark">Echo<span class="wm-accent">Ward</span></span>
       </a>
-      <div class="header-badge">
-        <span class="badge-dot" aria-hidden="true"></span>
-        <span class="badge-rank">2nd place</span><span class="badge-rest">, AI for Good Hackathon 2026</span>
+      <div class="header-actions">
+        <button id="textSizeBtn" class="a11y-btn" type="button" aria-pressed="false" title="Larger text" aria-label="Toggle larger text">
+          A<sup>+</sup>
+        </button>
+        <div class="header-badge">
+          <span class="badge-dot" aria-hidden="true"></span>
+          <span class="badge-rank">2nd place</span><span class="badge-rest">, AI for Good Hackathon 2026</span>
+        </div>
       </div>
     </div>
   </header>
@@ -94,6 +108,10 @@
         <button class="chip" data-query="earbuds">earbuds</button>
       </div>
 
+      <button id="demoBtn" class="demo-btn" type="button">
+        <span class="demo-ic" aria-hidden="true">▶</span> See it in action
+      </button>
+
       <!-- Trust line -->
       <p class="trust-row">
         <span>Voice-first</span><span class="sep" aria-hidden="true">·</span>
@@ -103,7 +121,7 @@
     </section>
 
     <!-- Status Bar -->
-    <div id="statusBar" class="status-bar hidden">
+    <div id="statusBar" class="status-bar hidden" role="status" aria-live="polite">
       <span class="status-spinner" aria-hidden="true"></span>
       <span id="statusText">Searching and checking safety…</span>
       <span class="scan-track" aria-hidden="true"></span>
@@ -194,7 +212,7 @@
   </footer>
 
   <!-- Warning Modal -->
-  <div id="warningModal" class="modal-overlay hidden">
+  <div id="warningModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
       <span class="modal-mark" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 4 2 18.5A2 2 0 0 0 3.7 21.5h16.6a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0Z" /><path d="M12 9.5v4.2" /><path d="M12 17.3h.01" /></svg>
@@ -263,6 +281,83 @@
         }
       }
       setTimeout(tick, 1300);
+    })();
+  </script>
+
+  <!-- Guided demo: auto-runs the scam-catch scenario -->
+  <script>
+    (function () {
+      var btn = document.getElementById('demoBtn');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var input = document.getElementById('searchInput');
+        var q = 'headphones under 40 euros';
+        if (input) input.value = q;
+        if (typeof runSearch === 'function') runSearch(q);
+        btn.disabled = true;
+        setTimeout(function () {
+          var crit = document.querySelector('.product-card.risk-critical');
+          if (crit) {
+            crit.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            crit.classList.add('demo-pulse');
+            setTimeout(function () {
+              crit.classList.remove('demo-pulse');
+              var action = crit.querySelector('.card-action');
+              if (action) action.click();
+              btn.disabled = false;
+            }, 1500);
+          } else { btn.disabled = false; }
+        }, 1750);
+      });
+    })();
+  </script>
+
+  <!-- Accessibility: larger-text toggle + modal focus/keyboard handling -->
+  <script>
+    (function () {
+      // Larger-text toggle (persisted)
+      var tBtn = document.getElementById('textSizeBtn');
+      if (tBtn) {
+        var KEY = 'ew-large-text';
+        function apply(on) {
+          document.documentElement.classList.toggle('a11y-large', on);
+          tBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        }
+        var saved = false;
+        try { saved = localStorage.getItem(KEY) === '1'; } catch (e) {}
+        apply(saved);
+        tBtn.addEventListener('click', function () {
+          var on = !document.documentElement.classList.contains('a11y-large');
+          apply(on);
+          try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) {}
+        });
+      }
+
+      // Modal: focus management, Escape to close, focus trap
+      var modal = document.getElementById('warningModal');
+      if (modal) {
+        var lastFocus = null;
+        new MutationObserver(function () {
+          var open = !modal.classList.contains('hidden');
+          if (open) {
+            lastFocus = document.activeElement;
+            var no = document.getElementById('modalNo');
+            if (no) no.focus();
+          } else if (lastFocus) { lastFocus.focus(); lastFocus = null; }
+        }).observe(modal, { attributes: true, attributeFilter: ['class'] });
+
+        document.addEventListener('keydown', function (e) {
+          if (modal.classList.contains('hidden')) return;
+          if (e.key === 'Escape') { var no = document.getElementById('modalNo'); if (no) no.click(); }
+          if (e.key === 'Tab') {
+            var f = modal.querySelectorAll('button');
+            if (!f.length) return;
+            var first = f[0], last = f[f.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+          }
+        });
+      }
     })();
   </script>
 </body>
