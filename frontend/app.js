@@ -235,6 +235,54 @@ function riskEmoji(risk) {
   return { Low: "✅", Medium: "⚠️", High: "🔶", Critical: "🚨" }[risk] || "❓";
 }
 
+// Animated circular "safety score" ring (0 risk → 100% safe).
+function safetyRing(score, risk) {
+  const safety = Math.max(4, Math.min(100, Math.round(100 - score * 9)));
+  const r = 26;
+  const circ = 2 * Math.PI * r;
+  const offset = circ * (1 - safety / 100);
+
+  const wrap = document.createElement("div");
+  wrap.className = `safety-ring ${riskClass(risk)}`;
+  wrap.setAttribute("role", "img");
+  wrap.setAttribute("aria-label", `Safety score ${safety} out of 100`);
+  wrap.innerHTML = `
+    <svg viewBox="0 0 64 64" width="60" height="60" aria-hidden="true">
+      <circle class="ring-track" cx="32" cy="32" r="${r}"></circle>
+      <circle class="ring-fill" cx="32" cy="32" r="${r}"
+        stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${circ.toFixed(1)}"></circle>
+    </svg>
+    <div class="ring-center">
+      <span class="ring-num">${safety}</span>
+      <span class="ring-unit">safe</span>
+    </div>`;
+
+  const fill = wrap.querySelector(".ring-fill");
+  requestAnimationFrame(() =>
+    requestAnimationFrame(() => { fill.style.strokeDashoffset = offset.toFixed(1); })
+  );
+  return wrap;
+}
+
+// Inline line-icon set (no emoji, no external images).
+const ICON_PATHS = {
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  alert: '<path d="M10.3 4 2 18.5A2 2 0 0 0 3.7 21.5h16.6a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4.2"/><path d="M12 17.3h.01"/>',
+  store: '<path d="M3.5 9.5 5 4.5h14l1.5 5a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1-5 0Z"/><path d="M5 11v8.5h14V11"/>',
+  star: '<path d="m12 3.5 2.6 5.3 5.8.85-4.2 4.05 1 5.8L12 16.9l-5.2 2.6 1-5.8-4.2-4.05 5.8-.85L12 3.5Z"/>',
+  headphones: '<path d="M4 13a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4" height="7.5" rx="1.6"/><rect x="17" y="13" width="4" height="7.5" rx="1.6"/>',
+  smartwatch: '<rect x="7" y="7" width="10" height="10" rx="2.5"/><path d="M9.2 7 8.5 3.5h7L14.8 7"/><path d="M9.2 17l-.7 3.5h7L14.8 17"/>',
+  speaker: '<rect x="6" y="3" width="12" height="18" rx="2.5"/><circle cx="12" cy="14.5" r="3"/><circle cx="12" cy="7" r="1"/>',
+  earbuds: '<path d="M9 8a3 3 0 0 0-3 3 3 3 0 0 0 3 3V8Z"/><path d="M9 8c2.6 0 4 1.6 4 4.2V17"/><path d="M15 8a3 3 0 0 1 3 3 3 3 0 0 1-3 3V8Z"/><path d="M15 8c-2.6 0-4 1.6-4 4.2"/>',
+  shield: '<path d="M12 3 5 5.5v5.5c0 4.3 2.9 7.6 7 9 4.1-1.4 7-4.7 7-9V5.5L12 3Z"/><path d="m9.5 12 1.8 1.8L15 10"/>',
+};
+
+function icon(name, size = 18) {
+  return `<svg class="ic" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON_PATHS[name] || ICON_PATHS.shield}</svg>`;
+}
+
+const CATEGORY_ICON = { headphones: "headphones", smartwatch: "smartwatch", speaker: "speaker", earbuds: "earbuds" };
+
 function renderCard(product, analysis, isRecommended) {
   const card = document.createElement("div");
   card.className = `product-card ${riskClass(analysis.risk)}`;
@@ -244,30 +292,36 @@ function renderCard(product, analysis, isRecommended) {
   if (analysis.risk === "Critical") {
     const stamp = document.createElement("div");
     stamp.className = "scam-stamp";
-    stamp.textContent = "⚠️ High Risk";
+    stamp.innerHTML = `${icon("alert", 13)}<span>High risk</span>`;
     card.appendChild(stamp);
   }
   if (isRecommended) {
     const stamp = document.createElement("div");
     stamp.className = "recommended-stamp";
-    stamp.textContent = "⭐ Recommended";
+    stamp.innerHTML = `${icon("check", 13)}<span>EchoWard's pick</span>`;
     card.appendChild(stamp);
   }
 
-  const img = document.createElement("img");
-  img.className = "product-image";
-  img.src = product.image_url;
-  img.alt = product.name;
-  card.appendChild(img);
+  // Designed monochrome product tile (no stock photos)
+  const thumb = document.createElement("div");
+  thumb.className = "product-thumb";
+  thumb.innerHTML = icon(CATEGORY_ICON[product.category] || "shield", 44);
+  card.appendChild(thumb);
 
   const body = document.createElement("div");
   body.className = "product-body";
 
-  // Risk badge
+  // Head row: risk badge + animated safety ring
+  const head = document.createElement("div");
+  head.className = "card-head";
+
   const badge = document.createElement("span");
   badge.className = `risk-badge ${riskClass(analysis.risk)}`;
-  badge.textContent = `${riskEmoji(analysis.risk)} ${analysis.risk} Risk`;
-  body.appendChild(badge);
+  badge.innerHTML = `${icon(analysis.risk === "Low" ? "check" : "alert", 13)}<span>${analysis.risk} risk</span>`;
+  head.appendChild(badge);
+
+  head.appendChild(safetyRing(analysis.score, analysis.risk));
+  body.appendChild(head);
 
   // Name
   const name = document.createElement("div");
@@ -275,22 +329,25 @@ function renderCard(product, analysis, isRecommended) {
   name.textContent = product.name;
   body.appendChild(name);
 
-  // Price
-  const price = document.createElement("div");
-  price.className = "product-price";
-  price.textContent = `€${product.price.toFixed(2)}`;
-  body.appendChild(price);
-
-  const marketPrice = document.createElement("div");
-  marketPrice.className = "product-market-price";
-  marketPrice.textContent = `Market avg: €${product.market_avg_price.toFixed(2)}`;
-  body.appendChild(marketPrice);
+  // Price row
+  const priceRow = document.createElement("div");
+  priceRow.className = "price-row";
+  priceRow.innerHTML =
+    `<span class="product-price">€${product.price.toFixed(2)}</span>` +
+    `<span class="product-market-price">avg €${product.market_avg_price.toFixed(2)}</span>`;
+  body.appendChild(priceRow);
 
   // Seller
   const seller = document.createElement("div");
   seller.className = "product-seller";
-  seller.textContent = `🏪 ${product.seller.name} · ⭐ ${product.rating}`;
+  seller.innerHTML =
+    `${icon("store", 15)}<span>${product.seller.name}</span>` +
+    `<span class="sep">·</span>${icon("star", 15)}<span>${product.rating.toFixed(1)}</span>`;
   body.appendChild(seller);
+
+  const divider = document.createElement("div");
+  divider.className = "card-divider";
+  body.appendChild(divider);
 
   // Reasons
   const reasons = document.createElement("div");
