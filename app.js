@@ -205,7 +205,9 @@ function searchProducts(query) {
     smartwatch: "smartwatch",
     watch: "smartwatch",
     earbud: "earbuds",
+    earbuds: "earbuds",
     airpod: "earbuds",
+    airpods: "earbuds",
   };
 
   let category = null;
